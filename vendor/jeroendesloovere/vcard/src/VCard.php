@@ -643,7 +643,7 @@ class VCard
     /**
      * multibyte word chunk split
      * @link http://php.net/manual/en/function.chunk-split.php#107711
-     * 
+     *
      * @param  string  $body     The string to be chunked.
      * @param  integer $chunklen The chunk length.
      * @param  string  $end      The line ending sequence.
@@ -857,6 +857,27 @@ class VCard
             $file,
             $this->getOutput()
         );
+    }
+
+    /*
+    Same code as save(), but we're going to iterate through an array to combine
+    multiple VCard objects into a single output file instead of several
+    downloads.
+    */
+    public function saveMultiple($vcardArray) {
+      $file = $this->getFilename() . '.' . $this->getFileExtension();
+
+      // Add save path if given
+      if (null !== $this->savePath) {
+          $file = $this->savePath . $file;
+      }
+
+      for($x=0; $x < sizeof($vcardArray); $x++) {
+        file_put_contents(
+            $file,
+            $vcardArray[$x]->getOutput()
+        );
+      }
     }
 
     /**
