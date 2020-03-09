@@ -1,40 +1,64 @@
 <?php
+
+/*
+Importing the VCard Lib via Composer Autoload
+*/
+require_once __DIR__ . '/vendor/autoload.php';
 use JeroenDesloovere\VCard\VCard;
 
 $filename = 'tester.csv';
-$contacts = [];
+
+//Create an empty multidimensional array
+$contacts = array();
 /*
 Structure:
 [First Name][Last Name][Phone Number]
 */
 
 //Open up CSV for reading
-$h = fopen("{$filename}", "r");
+$istream = fopen("tester.csv", "r");
+$filepath = 'C:\output';
 
 /*
 While there are still rows to read in the CSV, copy them
 into Contacts array. Each row represents one person's info.
 */
-while(($row = fgetcsv($h, 1000, ",")) !== FALSE) {
+$counter = 0;
+while(($row = fgetcsv($istream, 1000, ",")) !== FALSE) {
   $contacts[] = $row;
-  echo $row;
+  //$contacts[] = $row;
+  //var_dump($row);
+  //$counter += 1;
 }
 
-fclose($h);
+fclose($istream);
 
 //Loovere VCard Instantiation
-$vcard = new VCard();
+//$vcard = new VCard();
+$vcardObjects = [];
+//echo sizeof($contacts);
+//echo "\nEnd of Program";
 
 //Creating a vcard array that we will export
-for($x = 0; $x < count($contacts); $x++) {
-  $temp = $contacts[$x];
+for($x = 0; $x < sizeof($contacts); $x++) {
+  $vcard = new VCard();
+  //$temp = $contacts[$x];
+  //echo $contacts[$x][0];
+  //echo $contacts[$x][1];
+  //echo $contacts[$x][2];
+  $vcard->addName($contacts[$x][1], $contacts[$x][0]);
+  $vcard->addPhoneNumber($contacts[$x][2], 'WORK');
 
-  $vcard->addName($contacts[0], $contacts[1], $contacts[2]);
+  //$vcard->setSavePath($filepath);
+  $vcard->save();
+  $vcardObjects[] = $vcard;
 }
 
+//return $vcardObjects->download();
+
 echo "<pre>";
-var_dump($contacts);
+var_dump($vcardObjects);
 echo "</pre>";
 
-return $vcard->download();
+//return $vcard->download();
 ?>
