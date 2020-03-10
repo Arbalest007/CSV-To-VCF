@@ -539,6 +539,38 @@ class VCard
     }
 
     /**
+     * Build VCard (.vcf)
+     *
+     * @return string
+     */
+    public function buildMultiVCard($vcardArray)
+    {
+        for($x=0; $x < sizeof($vcardArray); $x++) {
+          // init string
+          if($x==0)
+            $string = "BEGIN:VCARD\r\n";
+          else {
+            $string .= "BEGIN:VCARD\r\n";
+          }
+          $string .= "VERSION:3.0\r\n";
+          $string .= "REV:" . date("Y-m-d") . "T" . date("H:i:s") . "Z\r\n";
+
+          // loop all properties
+          $properties = $vcardArray[$x]->getProperties();
+          foreach ($properties as $property) {
+              // add to string
+              $string .= $vcardArray[$x]->fold($property['key'] . ':' . $vcardArray[$x]->escape($property['value']) . "\r\n");
+          }
+
+          // add to string
+          $string .= "END:VCARD\r\n";
+        }
+
+        // return
+        return $string;
+    }
+
+    /**
      * Build VCalender (.ics) - Safari (< iOS 8) can not open .vcf files, so we have build a workaround.
      *
      * @return string
@@ -872,12 +904,13 @@ class VCard
           $file = $this->savePath . $file;
       }
 
-      for($x=0; $x < sizeof($vcardArray); $x++) {
-        file_put_contents(
+      $filename_output = 'Test';
+      $file = $filename_output . $file;
+
+      file_put_contents(
             $file,
-            $vcardArray[$x]->getOutput()
-        );
-      }
+            $this->buildMultiVCard($vcardArray)
+      );
     }
 
     /**
