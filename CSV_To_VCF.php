@@ -53,16 +53,15 @@ for($x = 0; $x < sizeof($contacts); $x++) {
   //echo $contacts[$x][1];
   //echo $contacts[$x][2];
 
+  //***Format***
   //lastName, firstName, additional, prefix, suffix
   $vcardTemp->addName($contacts[$x][0], $contacts[$x][1]);
-
   $vcardTemp->addPhoneNumber($contacts[$x][2], 'CELL');
   $vcardTemp->addPhoneNumber($contacts[$x][3], 'WORK');
   $vcardTemp->addEmail($contacts[$x][4], 'WORK');
   $vcardTemp->addJobtitle($contacts[$x][5]);
 
-  //$vcard->setSavePath($filepath);
-  //$vcard->save();
+  //Insert vcard into the array
   $vcardObjects[] = $vcardTemp;
 }
 

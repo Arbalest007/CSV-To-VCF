@@ -415,7 +415,8 @@ class VCard
     {
         $this->setProperty(
             'phoneNumber',
-            'TEL' . (($type != '') ? ';' . $type : ''),
+            //Ternary Operator to check if Phone Number is empty
+            'TEL' . (($type != '') ? ';type=' . $type : ''),
             $number
         );
 
