@@ -60,6 +60,7 @@ for($x = 0; $x < sizeof($contacts); $x++) {
   $vcardTemp->addPhoneNumber($contacts[$x][3], 'WORK');
   $vcardTemp->addEmail($contacts[$x][4], 'WORK');
   $vcardTemp->addJobtitle($contacts[$x][5]);
+  $vcardTemp->addCompany('Stego Industries');
 
   //Insert vcard into the array
   $vcardObjects[] = $vcardTemp;
